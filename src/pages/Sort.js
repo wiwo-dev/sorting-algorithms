@@ -1,50 +1,54 @@
-import { Route, Switch, Redirect } from "react-router-dom";
 import {
   Box,
-  Heading,
   Button,
-  Slide,
   Slider,
-  SliderTrack,
   SliderFilledTrack,
   SliderThumb,
+  SliderTrack,
   Text,
+  RadioGroup,
+  Stack,
+  VStack,
+  Radio,
 } from "@chakra-ui/react";
-import { forwardRef, useEffect, useRef, useState } from "react";
-import { Flipper, Flipped, spring } from "react-flip-toolkit";
-
-import { getRandomColor } from "helpers/helpers";
-import { shuffleOneStepSpecific, shuffleStepByStep } from "helpers/shuffling";
-import { bubbleSortStepByStep, mergeSortStepByStep } from "helpers/sorting";
-import { useStripesArray, Stripe } from "helpers/useStripesArray";
 import { bubbleSort } from "algorithms/bubbleSort";
 import { mergeSort } from "algorithms/mergeSort";
+import { shuffleStepByStep } from "helpers/shuffling";
+import { bubbleSortStepByStep, mergeSortStepByStep } from "helpers/sorting";
+import { useStripesArray } from "helpers/useStripesArray";
+import { Stripe } from "components/Stripe";
+import { useRef, useState } from "react";
+import { Flipped, Flipper } from "react-flip-toolkit";
 
 export default function Sort({}) {
-  const [counter, setCounter] = useState(0);
+  const [speed, setSpeed] = useState(30);
 
-  const timeoutIds = useRef([]);
+  const [selectedAlgorithm, setSelectedAlgorithm] = useState("bubbleSort");
 
-  const addTimeoutId = (timeoutId) => {
-    //console.log(timeoutId);
-    timeoutIds.current.push(timeoutId);
-  };
+  const {
+    stripes,
+    setStripes,
+    stripesString,
+    stripesToString,
+    comparing,
+    setComparing,
+    swapping,
+    setSwapping,
+    sorted,
+    setSorted,
+    clearColors,
+    stripesCount,
+    setStripesCount,
+  } = useStripesArray({ stripesCount: 30 });
 
-  const { stripes, setStripes, stripesString, stripesToString, comparing, setComparing } = useStripesArray();
-
-  const handleOneStepShuffleClick = async () => {
+  const handleQuickShuffleClick = async () => {
+    clearColors();
     shuffleStepByStep(stripes, 0, setStripes);
   };
 
   const handleStepByStepShuffleClick = async () => {
+    clearColors();
     shuffleStepByStep(stripes, speed, setStripes);
-  };
-
-  const handleResolveClick = () => {
-    for (const timeout of timeoutIds.current) {
-      //console.log(timeout);
-      clearTimeout(timeout);
-    }
   };
 
   const compare = (a, b) => {
@@ -52,18 +56,21 @@ export default function Sort({}) {
     return false;
   };
 
-  const handleSortStepByStepClick = () => {
-    bubbleSortStepByStep(stripes, speed, compare, setStripes, addTimeoutId);
-  };
-
-  const handleMergeSortStepByStepClick = () => {
-    mergeSortStepByStep(stripes, speed, compare, setStripes, addTimeoutId);
-  };
+  const getValue = (array, ind) => array[ind].num;
 
   //using different approach - first setting 'order' array as all steps of algo
   const handleSort = async () => {
-    //let order = bubbleSort(stripes, compare);
-    let order = mergeSort(stripes, compare);
+    let order = [];
+    switch (selectedAlgorithm) {
+      case "mergeSort":
+        order = mergeSort(stripes, compare, getValue);
+        break;
+      case "bubbleSort":
+        order = bubbleSort(stripes, compare, getValue);
+        break;
+      default:
+        break;
+    }
 
     for (const step of order) {
       //console.log(order);
@@ -71,13 +78,18 @@ export default function Sort({}) {
         setTimeout(() => {
           const [a, b, arr, ind] = step;
 
-          //comparing
+          //comparing - yellow
           if (a !== null || b !== null) setComparing([a, b]);
 
           if (arr) {
-            console.log("petla order i mam arr");
-            console.log(arr);
+            //update order
             setStripes([...arr]);
+            if (a !== null || b !== null) setSwapping([a, b]);
+          }
+
+          ///already sorted - green
+          if (ind !== null) {
+            setSorted((prev) => [...prev, ind]);
           }
           resolve();
         }, speed);
@@ -85,56 +97,61 @@ export default function Sort({}) {
     }
   };
 
-  const [speed, setSpeed] = useState(20);
-
   return (
     <Box>
       <Box minH="70px" bgColor="orange.200" display="flex" justifyContent="center" gridGap="20px" alignItems="center">
-        <Button onClick={handleSortStepByStepClick}>SORT SBS</Button>
-        <Button onClick={handleMergeSortStepByStepClick}>MERGE SORT</Button>
-        <Button onClick={handleOneStepShuffleClick}>RANDOM ONE STEP</Button>
-        <Button onClick={handleStepByStepShuffleClick}>RANDOM STEP BY STEP</Button>
-        <Button onClick={handleSort}>HANDLE SORT</Button>
-        <Button onClick={handleResolveClick}>RESOLVE</Button>
-        <Slider
-          aria-label="slider-ex-2"
-          colorScheme="pink"
-          min={0}
-          max={500}
-          defaultValue={3}
-          maxW="300px"
-          onChange={(val) => setSpeed(val)}>
-          <SliderTrack>
-            <SliderFilledTrack />
-          </SliderTrack>
-          <SliderThumb />
-        </Slider>
-        <Text minW="30px">{speed}</Text>
+        <Button onClick={handleQuickShuffleClick}>SHUFFLE QUICK</Button>
+        <Button onClick={handleStepByStepShuffleClick}>SHUFFLE STEP BY STEP</Button>
+        <RadioGroup onChange={setSelectedAlgorithm} value={selectedAlgorithm}>
+          <VStack direction="row">
+            <Radio value="bubbleSort">bubbleSort</Radio>
+            <Radio value="mergeSort">mergeSort</Radio>
+          </VStack>
+        </RadioGroup>
+        <Button onClick={handleSort}>SORT {selectedAlgorithm}</Button>
+
+        <VStack minW="200px">
+          <Text fontSize="xs" minW="30px">
+            Speed: {speed}
+          </Text>
+          <Slider colorScheme="pink" min={0} max={500} maxW="300px" onChange={(val) => setSpeed(val)}>
+            <SliderTrack>
+              <SliderFilledTrack />
+            </SliderTrack>
+            <SliderThumb />
+          </Slider>
+        </VStack>
+        <VStack minW="200px">
+          <Text fontSize="xs" minW="30px">
+            Count: {stripesCount}
+          </Text>
+          <Slider colorScheme="blue" min={0} max={100} maxW="300px" onChange={setStripesCount}>
+            <SliderTrack>
+              <SliderFilledTrack />
+            </SliderTrack>
+            <SliderThumb />
+          </Slider>
+        </VStack>
       </Box>
       <Flipper
-      //flipKey={stripesToString()}
-      // staggerConfig={{ default: { speed: 1 } }}
-      //spring="gentle"
+        flipKey={stripesToString()}
+        // staggerConfig={{ default: { speed: 1 } }}
+        //spring="gentle"
       >
-        <Box display="flex" flexDirection="row" justifyContent="space-around" minW="100%" minH="100vh">
+        <Box display="flex" flexDirection="row" justifyContent="center" gridGap="2px" minW="100%" minH="100vh">
           {stripes?.map((s, index) => (
-            <Flipped flipId={s.num} key={index}>
-              <Box key={index}>
+            <Flipped flipId={s.num} key={s.num}>
+              <div>
                 <Stripe
                   height={s.height}
-                  width={10}
-                  bgColor={
-                    s.active !== false
-                      ? s.active
-                      : s.num === comparing[0]
-                      ? "yellow"
-                      : s.num === comparing[1]
-                      ? "yellow"
-                      : s.color
-                  }
+                  comparing={comparing}
+                  swapping={swapping}
+                  sorted={sorted}
+                  num={s.num}
+                  active={s.active}
+                  color={s.color}
                 />
-                {/* {{ ...s.el }} */}
-              </Box>
+              </div>
             </Flipped>
           ))}
         </Box>

@@ -17,8 +17,9 @@ import { Flipper, Flipped, spring } from "react-flip-toolkit";
 import { shuffle, getRandomColor, simpleSortArray } from "helpers/helpers";
 import { useStripesArray } from "helpers/useStripesArray";
 import Sort from "pages/Sort";
-import Sort2 from "pages/Sort2";
+//import Sort2 from "pages/Sort";
 import { Graf } from "pages/Graf";
+import { PathfinderBoard } from "pages/PathfinderBoard";
 
 function App({}) {
   const [menuPosition, setMenuPosition] = useState(-100);
@@ -32,19 +33,20 @@ function App({}) {
         bgColor="gray.200"
         position="absolute"
         right={menuPosition}
+        paddingX={10}
         onMouseEnter={() => setMenuPosition(0)}
         onMouseLeave={() => setMenuPosition(-100)}>
         <Link href="/">START</Link>
         <Link href="/sort">SORT</Link>
-        <Link href="/sort2">SORT2</Link>
         <Link href="/graf">GRAF</Link>
+        <Link href="/board">BOARD</Link>
       </Box>
       <Switch>
         {/* <Route path="/" render={() => <Testowa />} /> */}
 
         <Route path="/sort" render={() => <Sort />} />
-        <Route path="/sort2" render={() => <Sort2 />} />
         <Route path="/graf" render={() => <Graf />} />
+        <Route path="/board" render={() => <PathfinderBoard />} />
       </Switch>
     </Box>
   );
