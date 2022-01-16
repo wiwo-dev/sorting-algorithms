@@ -1,80 +1,80 @@
-const nextDirections = (currentDirection) => {
-  switch (currentDirection) {
-    case "up":
-      return ["up", "right"];
-    case "right":
-      return ["right", "down"];
-    case "down":
-      return ["down", "left"];
-    case "left":
-      return ["left", "up"];
-    case null:
-      return ["left", "up", "right", "down"];
-    default:
-      return [];
-  }
-};
+export default function Pathfinder({ startStr, width, height }) {
+  this.visited = {};
+  this.visitedArr = [];
+  this.obstacle = {};
+  this.width = width;
+  this.height = height;
+  this.startStr = startStr;
 
-const getXY = (posStr) => {
-  const [x, y] = posStr.split("-");
-  return [Number(x), Number(y)];
-};
+  console.log(this.startStr);
 
-const checkMoves = (startStr, currentDirection, visited, width, height) => {
-  let moves = [];
-  let distance = 1;
-  const [x, y] = getXY(startStr);
-  const nextDirectionsArr = nextDirections(currentDirection);
+  const getXY = (posStr) => {
+    const [x, y] = posStr.split("-");
+    return [Number(x), Number(y)];
+  };
 
-  nextDirectionsArr.forEach((dir) => {
-    let newPos;
-    switch (dir) {
+  const nextDirections = (currentDirection) => {
+    switch (currentDirection) {
       case "up":
-        newPos = `${x}-${y - distance}`;
-        if (y - distance >= 0 && !visited[newPos]) moves.push({ dir, newPos });
-        break;
-      case "down":
-        newPos = `${x}-${y + distance}`;
-        if (y + distance < height && !visited[newPos]) moves.push({ dir, newPos });
-        break;
+        return ["up", "right"];
       case "right":
-        newPos = `${x + distance}-${y}`;
-        if (x + distance < width && !visited[newPos]) moves.push({ dir, newPos });
-        break;
+        return ["right", "down"];
+      case "down":
+        return ["down", "left"];
       case "left":
-        newPos = `${x - distance}-${y}`;
-        if (x - distance >= 0 && !visited[newPos]) moves.push({ dir, newPos });
-        break;
+        return ["left", "up"];
+      case null:
+        return ["left", "up", "right", "down"];
       default:
-        break;
+        return [];
     }
-  });
+  };
 
-  return moves;
-};
+  const checkMoves = ({ startStr, currentDirection }) => {
+    let moves = [];
+    let distance = 1;
+    const [x, y] = getXY(startStr);
+    const nextDirectionsArr = nextDirections(currentDirection);
 
-const pathfinderHelper = (movesArr, visited, visitedArr, width, height) => {
-  //if (!movesArr || !movesArr.length) return;
+    const checkIfClear = (newPos) => {
+      return !this.visited[newPos] && !this.obstacle[newPos];
+    };
 
-  let nextPossibleMoves = [...movesArr];
+    nextDirectionsArr.forEach((dir) => {
+      let newPos;
+      switch (dir) {
+        case "up":
+          newPos = `${x}-${y - distance}`;
+          if (y - distance >= 0 && checkIfClear(newPos)) moves.push({ dir, newPos });
+          break;
+        case "down":
+          newPos = `${x}-${y + distance}`;
+          if (y + distance < this.height && checkIfClear(newPos)) moves.push({ dir, newPos });
+          break;
+        case "right":
+          newPos = `${x + distance}-${y}`;
+          if (x + distance < this.width && checkIfClear(newPos)) moves.push({ dir, newPos });
+          break;
+        case "left":
+          newPos = `${x - distance}-${y}`;
+          if (x - distance >= 0 && checkIfClear(newPos)) moves.push({ dir, newPos });
+          break;
+        default:
+          break;
+      }
+    });
 
-  while (nextPossibleMoves.length > 0) {
-    const move = nextPossibleMoves.shift();
-    visited[move.newPos] = true;
-    visitedArr.push(move.newPos);
-    console.log(move.newPos);
-    nextPossibleMoves.push(...checkMoves(move.newPos, move.dir, visited, width, height));
-  }
+    return moves;
+  };
 
-  if (!nextPossibleMoves.length) return;
-};
-
-export const pathfinder = (startStr, endStr, width, height) => {
-  let visited = {};
-  let visitedArr = [];
-
-  pathfinderHelper(checkMoves(startStr, null, visited, width, height), visited, visitedArr, width, height);
-
-  console.log(visitedArr);
-  return [visited, visitedArr];
-};
+  this.init = () => {
+    let nextPossibleMoves = [...checkMoves({ startStr: this.startStr, currentDirection: null })];
+    while (nextPossibleMoves.length > 0) {
+      const move = nextPossibleMoves.shift();
+      this.visited[move.newPos] = true;
+      this.visitedArr.push(move.newPos);
+      nextPossibleMoves.push(...checkMoves({ startStr: move.newPos, currentDirection: move.dir }));
+    }
+    if (!nextPossibleMoves.length) return;
+  };
+}

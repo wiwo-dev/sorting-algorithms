@@ -2,10 +2,11 @@ import { Box, Heading, Button } from "@chakra-ui/react";
 import { height } from "dom-helpers";
 import React, { useEffect, useRef, useState } from "react";
 
-import { pathfinder } from "algorithms/pathfinder";
+import Pathfinder from "algorithms/pathfinder";
+import Pathfinder2 from "algorithms/pathfinder2";
 
-const BOARD_WIDTH = 25;
-const BOARD_HEIGHT = 15;
+const BOARD_WIDTH = 45;
+const BOARD_HEIGHT = 45;
 const BOX_SIZE = 20;
 
 export const PathfinderBoard = () => {
@@ -76,9 +77,7 @@ export const PathfinderBoard = () => {
           }
         }
       }
-
       updateBoardState();
-      //console.log(`fieldStr: ${fieldStr}`);
     }
   };
 
@@ -101,10 +100,33 @@ export const PathfinderBoard = () => {
   };
 
   const handlePathfinderClick = () => {
-    const [visited, visitedArr] = pathfinder("3-3", "10-28", BOARD_WIDTH, BOARD_HEIGHT);
-    console.log(visitedArr);
-    animatePathfinder(visitedArr);
-    //updateBoardState({ visitedFields: visited });
+    const pathfinder = new Pathfinder({ startStr: "3-3", width: BOARD_WIDTH, height: BOARD_HEIGHT });
+    pathfinder.init();
+    animatePathfinder(pathfinder.visitedArr);
+  };
+
+  const handlePathfinder2Click = async () => {
+    const pathfinder = new Pathfinder2({
+      startStr: "3-3",
+      width: BOARD_WIDTH,
+      height: BOARD_HEIGHT,
+      paintedFields: boardState.paintedFields,
+    });
+    pathfinder.init();
+    console.log(pathfinder.stepsArr);
+
+    let visited = {};
+    for (let step of pathfinder.stepsArr) {
+      await new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve();
+        }, 80);
+      });
+      console.log("sek");
+      visited = { ...visited, ...step };
+
+      updateBoardState({ visitedFields: visited });
+    }
   };
 
   return (
@@ -114,6 +136,7 @@ export const PathfinderBoard = () => {
           <Heading>Tablica</Heading>
           <Button onClick={handleClearBoard}>CLEAR</Button>
           <Button onClick={handlePathfinderClick}>PATHFINDR</Button>
+          <Button onClick={handlePathfinder2Click}>PATHFINDR2</Button>
         </Box>
         <Board
           width={BOARD_WIDTH}
