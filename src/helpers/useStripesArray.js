@@ -2,17 +2,15 @@ import { Box } from "@chakra-ui/layout";
 import { useEffect, useState } from "react";
 import { getRandomColor } from "./helpers";
 
-export const Stripe = ({ height, width, bgColor }) => {
-  return <Box height={`${height}px`} minW={`${width}px`} shadow="md" bgColor={bgColor} />;
-};
-
-export const useStripesArray = () => {
+export const useStripesArray = ({ amount }) => {
   const [stripes, setStripes] = useState([]);
   const [stripesString, setStripesString] = useState("");
+  const [stripesOrdered, setStripesOrdered] = useState([]);
+
   const [comparing, setComparing] = useState([null, null]);
   const [swapping, setSwapping] = useState([null, null]);
   const [sorted, setSorted] = useState([]);
-  const [stripesCount, setStripesCount] = useState(20);
+  const [stripesCount, setStripesCount] = useState(amount ? amount : 20);
 
   useEffect(() => {
     const arr = [];
@@ -22,6 +20,7 @@ export const useStripesArray = () => {
         height: randHeight,
         num: i,
         active: false,
+        position: i,
         //color: getRandomColor(),
         color: "grey",
       });
@@ -30,30 +29,37 @@ export const useStripesArray = () => {
   }, [stripesCount]);
 
   useEffect(() => {
-    setStripesString(stripesToString());
-    //console.log(stripesString);
+    let copy = [];
+    for (let i = 0; i < stripes.length; i++) {
+      copy[stripes[i].num] = stripes[i];
+      copy[stripes[i].num].position = i;
+    }
+    setStripesOrdered(copy);
   }, [stripes]);
-
-  const stripesToString = () => {
-    let str = "";
-    stripes.forEach((element) => {
-      let compStr = "";
-      comparing.forEach((comp) => (compStr = compStr + comp));
-      str = str + "|" + element.height + "-" + element.num + "-" + element.active + "|" + compStr;
-    });
-    return str;
-  };
 
   const clearColors = () => {
     setComparing([null, null]);
     setSorted([]);
   };
 
+  const compare = (a, b) => {
+    if (a.height > b.height) return true;
+    return false;
+  };
+
+  const getValue = (array, ind) => array[ind].num;
+
+  const getColor = (str) => {
+    if (sorted.includes(str.num)) return "green";
+    if (comparing.includes(str.num)) return "red";
+    //if (swapping.includes(str.num)) return "yellow";
+    return str.color;
+  };
+
   return {
     stripes,
     setStripes,
-    stripesString,
-    stripesToString,
+    stripesOrdered,
     comparing,
     setComparing,
     swapping,
@@ -63,5 +69,8 @@ export const useStripesArray = () => {
     clearColors,
     stripesCount,
     setStripesCount,
+    compare,
+    getValue,
+    getColor,
   };
 };

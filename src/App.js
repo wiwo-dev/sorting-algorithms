@@ -20,9 +20,10 @@ import Sort from "pages/Sort";
 //import Sort2 from "pages/Sort";
 import { Graf } from "pages/Graf";
 import { PathfinderBoard } from "pages/PathfinderBoard";
+import Animations from "pages/Animations";
 
 function App({}) {
-  const [menuPosition, setMenuPosition] = useState(-100);
+  const [menuPosition, setMenuPosition] = useState(-200);
 
   return (
     <Box>
@@ -35,11 +36,12 @@ function App({}) {
         right={menuPosition}
         paddingX={10}
         onMouseEnter={() => setMenuPosition(0)}
-        onMouseLeave={() => setMenuPosition(-100)}>
+        onMouseLeave={() => setMenuPosition(-200)}>
         <Link href="/">START</Link>
         <Link href="/sort">SORT</Link>
         <Link href="/graf">GRAF</Link>
         <Link href="/board">BOARD</Link>
+        <Link href="/animations">ANIMATIONS</Link>
       </Box>
       <Switch>
         {/* <Route path="/" render={() => <Testowa />} /> */}
@@ -47,6 +49,7 @@ function App({}) {
         <Route path="/sort" render={() => <Sort />} />
         <Route path="/graf" render={() => <Graf />} />
         <Route path="/board" render={() => <PathfinderBoard />} />
+        <Route path="/animations" render={() => <Animations />} />
       </Switch>
     </Box>
   );

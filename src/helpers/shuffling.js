@@ -9,7 +9,7 @@ export function shuffle(array) {
     i = Math.floor(Math.random() * array.length);
     // If not already shuffled, move it to the new array.
     if (i in array) {
-      copy.push(array[i]);
+      copy.push({ ...array[i], position: i });
       delete array[i];
       n--;
     }
@@ -44,7 +44,7 @@ export const shuffleStepByStep = async (array, speed, onChange) => {
       }
       delete numbersArr[copy[i].num];
       copy = shuffleOneStepSpecific(copy, i);
-      // console.log(copy);
+      //console.log(copy);
       // console.log(numbersArr);
       n--;
       onChange(copy);

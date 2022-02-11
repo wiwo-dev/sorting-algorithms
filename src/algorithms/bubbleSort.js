@@ -7,6 +7,13 @@ const swapByIndex = (array, indexToCheck1, indexToCheck2) => {
 };
 
 //https://www.geeksforgeeks.org/bubble-sort/
+/**
+ *
+ * @param {*} array
+ * @param {*} compare
+ * @param {*} getValue
+ * @returns ORDER[i]: currently comparing value, currently comparing value, arr, final value
+ */
 export const bubbleSort = (array, compare, getValue) => {
   let sorted = [...array];
   let length = array.length;
@@ -25,5 +32,7 @@ export const bubbleSort = (array, compare, getValue) => {
     }
     order.push([null, null, null, getValue(sorted, length - i - 1)]);
   }
+  console.log("KONIEC SORTOWANIA");
+
   return order;
 };
