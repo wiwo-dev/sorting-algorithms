@@ -4,7 +4,7 @@ import { getRandomColor } from "./helpers";
 
 export const useStripesArray = ({ amount }) => {
   const [stripes, setStripes] = useState([]);
-  const [stripesString, setStripesString] = useState("");
+
   const [stripesOrdered, setStripesOrdered] = useState([]);
 
   const [comparing, setComparing] = useState([null, null]);

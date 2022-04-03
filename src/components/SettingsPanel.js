@@ -77,7 +77,13 @@ export default function SettingsPanel() {
           <Text fontSize="xs" minW="30px">
             Count: {stripesCount}
           </Text>
-          <Slider colorScheme="blue" min={0} max={100} maxW="300px" onChange={setStripesCount}>
+          <Slider
+            colorScheme="blue"
+            min={0}
+            max={100}
+            maxW="300px"
+            onChange={setStripesCount}
+            defaultValue={stripesCount}>
             <SliderTrack>
               <SliderFilledTrack />
             </SliderTrack>

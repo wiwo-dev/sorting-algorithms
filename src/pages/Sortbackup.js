@@ -16,7 +16,8 @@ import { Flipper, Flipped, spring } from "react-flip-toolkit";
 import { getRandomColor } from "helpers/helpers";
 import { shuffleOneStepSpecific, shuffleStepByStep } from "helpers/shuffling";
 import { bubbleSortStepByStep, mergeSortStepByStep } from "helpers/sorting";
-import { useStripesArray, Stripe } from "helpers/useStripesArray";
+import { useStripesArray } from "helpers/useStripesArray";
+import { Stripe } from "components/Stripe";
 import { bubbleSort } from "algorithms/bubbleSort";
 import { mergeSort } from "algorithms/mergeSort";
 

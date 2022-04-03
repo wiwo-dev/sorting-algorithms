@@ -21,6 +21,8 @@ import Sort from "pages/Sort";
 import { Graf } from "pages/Graf";
 import { PathfinderBoard } from "pages/PathfinderBoard";
 import Animations from "pages/Animations";
+import SortTest from "pages/SortTest";
+import Sortbackup from "pages/Sortbackup";
 
 function App({}) {
   const [menuPosition, setMenuPosition] = useState(-200);
@@ -39,6 +41,8 @@ function App({}) {
         onMouseLeave={() => setMenuPosition(-200)}>
         <Link href="/">START</Link>
         <Link href="/sort">SORT</Link>
+        <Link href="/sorttest">SORT Test</Link>
+        <Link href="/sortbackup">SORTBackup</Link>
         <Link href="/graf">GRAF</Link>
         <Link href="/board">BOARD</Link>
         <Link href="/animations">ANIMATIONS</Link>
@@ -47,6 +51,8 @@ function App({}) {
         {/* <Route path="/" render={() => <Testowa />} /> */}
 
         <Route path="/sort" render={() => <Sort />} />
+        <Route path="/sorttest" render={() => <SortTest />} />
+        <Route path="/sortbackup" render={() => <Sortbackup />} />
         <Route path="/graf" render={() => <Graf />} />
         <Route path="/board" render={() => <PathfinderBoard />} />
         <Route path="/animations" render={() => <Animations />} />

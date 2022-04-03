@@ -34,5 +34,16 @@ export const bubbleSort = (array, compare, getValue) => {
   }
   console.log("KONIEC SORTOWANIA");
 
+  const arrays = [];
+  order.map((el, ind) => {
+    if (el[2]) {
+      arrays.push(el[2]);
+    }
+  });
+
+  arrays.map((stripe) => {
+    console.log(stripe[0]);
+  });
+
   return order;
 };
