@@ -23,6 +23,7 @@ import { PathfinderBoard } from "pages/PathfinderBoard";
 import Animations from "pages/Animations";
 import SortTest from "pages/SortTest";
 import Sortbackup from "pages/Sortbackup";
+import Tests from "pages/Tests";
 
 function App({}) {
   const [menuPosition, setMenuPosition] = useState(-200);
@@ -42,7 +43,8 @@ function App({}) {
         <Link href="/">START</Link>
         <Link href="/sort">SORT</Link>
         <Link href="/sorttest">SORT Test</Link>
-        <Link href="/sortbackup">SORTBackup</Link>
+        <Link href="/tests">Tests</Link>
+
         <Link href="/graf">GRAF</Link>
         <Link href="/board">BOARD</Link>
         <Link href="/animations">ANIMATIONS</Link>
@@ -52,10 +54,11 @@ function App({}) {
 
         <Route path="/sort" render={() => <Sort />} />
         <Route path="/sorttest" render={() => <SortTest />} />
-        <Route path="/sortbackup" render={() => <Sortbackup />} />
+
         <Route path="/graf" render={() => <Graf />} />
         <Route path="/board" render={() => <PathfinderBoard />} />
         <Route path="/animations" render={() => <Animations />} />
+        <Route path="/tests" render={() => <Tests />} />
       </Switch>
     </Box>
   );
