@@ -1,17 +1,14 @@
 import { Box } from "@chakra-ui/react";
 import { bubbleSort } from "algorithms/bubbleSort";
 import { mergeSort } from "algorithms/mergeSort";
-import { shuffleStepByStep } from "helpers/shuffling";
-
+import { shuffleStepByStep } from "algorithms/shuffling";
 import { useStripesArray } from "helpers/useStripesArray";
-
-import { useRef, useState } from "react";
-
+import { createContext, useRef, useState } from "react";
 import { useInterval } from "helpers/useInterval";
-
-import { SettingsContext } from "helpers/SettingsContext";
 import SettingsPanel from "components/SettingsPanel";
-import StripesGroup from "components/StripesGroup";
+import { motion } from "framer-motion";
+
+export const SettingsContext = createContext();
 
 export default function Sort({}) {
   const [speed, setSpeed] = useState(30);
@@ -42,7 +39,7 @@ export default function Sort({}) {
     compare,
     getValue,
     getColor,
-  } = useStripesArray({ stripesCount: 30 });
+  } = useStripesArray({ amount: 40 });
 
   const makeStep = (step) => {
     const [a, b, arr, ind] = step;
@@ -100,7 +97,26 @@ export default function Sort({}) {
     <SettingsContext.Provider value={value}>
       <Box>
         <SettingsPanel />
-        <StripesGroup />
+        <Box position="relative">
+          {stripesOrdered.map((str, i) => {
+            const distance = document.body.clientWidth / stripesCount;
+            return (
+              <motion.div
+                key={i}
+                animate={{ x: str.position * distance }}
+                transition={{ duration: 0.1 }}
+                style={{ position: "absolute" }}>
+                <div
+                  style={{
+                    height: `${str.height}px`,
+                    width: "20px",
+                    position: "absolute",
+                    background: getColor(str),
+                  }}></div>
+              </motion.div>
+            );
+          })}
+        </Box>
       </Box>
     </SettingsContext.Provider>
   );

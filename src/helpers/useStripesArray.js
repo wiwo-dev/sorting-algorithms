@@ -1,6 +1,4 @@
-import { Box } from "@chakra-ui/layout";
 import { useEffect, useState } from "react";
-import { getRandomColor } from "./helpers";
 
 export const useStripesArray = ({ amount }) => {
   const [stripes, setStripes] = useState([]);
@@ -14,7 +12,7 @@ export const useStripesArray = ({ amount }) => {
 
   useEffect(() => {
     const arr = [];
-    for (let i = 0; i < stripesCount; i++) {
+    for (let i = 0; i < amount; i++) {
       const randHeight = Math.round(Math.random() * (window.innerHeight - 200));
       arr.push({
         height: randHeight,

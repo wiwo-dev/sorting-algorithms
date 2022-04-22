@@ -1,10 +1,6 @@
 import {
   Box,
   Button,
-  FormControl,
-  FormLabel,
-  Radio,
-  RadioGroup,
   Select,
   Slider,
   SliderFilledTrack,
@@ -13,7 +9,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { SettingsContext } from "helpers/SettingsContext";
+import { SettingsContext } from "pages/Sort";
 import { useContext } from "react";
 
 export default function SettingsPanel() {
@@ -62,8 +58,8 @@ export default function SettingsPanel() {
           <Slider
             colorScheme="pink"
             min={0}
-            max={100}
-            step={5}
+            max={30}
+            step={1}
             maxW="300px"
             defaultValue={speed}
             onChange={(val) => setSpeed(val)}>

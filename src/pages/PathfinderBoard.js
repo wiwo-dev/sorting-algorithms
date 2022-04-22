@@ -1,5 +1,5 @@
 import { Box, Heading, Button } from "@chakra-ui/react";
-import { height } from "dom-helpers";
+
 import React, { useEffect, useRef, useState } from "react";
 
 import Pathfinder from "algorithms/pathfinder";
