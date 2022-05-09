@@ -3,6 +3,7 @@ import { Box, Link } from "@chakra-ui/react";
 import { forwardRef, useEffect, useRef, useState } from "react";
 
 import Sort from "pages/Sort";
+import SortTest from "pages/SortTest";
 
 import { PathfinderBoard } from "pages/PathfinderBoard";
 
@@ -23,12 +24,13 @@ function App({}) {
         onMouseLeave={() => setMenuPosition(-200)}>
         <Link href="/">START</Link>
         <Link href="/sort">SORT</Link>
-
+        <Link href="/sorttest">SORT TEST</Link>
         <Link href="/board">BOARD</Link>
       </Box>
       <Switch>
         {/* <Route path="/" render={() => <Testowa />} /> */}
 
+        <Route path="/sorttest" render={() => <SortTest />} />
         <Route path="/sort" render={() => <Sort />} />
 
         <Route path="/board" render={() => <PathfinderBoard />} />

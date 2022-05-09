@@ -10,7 +10,7 @@ import { motion } from "framer-motion";
 
 import { SettingsContext } from "helpers/SettingsContext";
 
-export default function Sort() {
+export default function SortTest() {
   const [speed, setSpeed] = useState(30);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState("bubbleSort");
   const [isRunning, setIsRunning] = useState(false);

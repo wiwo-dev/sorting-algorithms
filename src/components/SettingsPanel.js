@@ -9,7 +9,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { SettingsContext } from "pages/Sort";
+import { SettingsContext } from "helpers/SettingsContext";
 import { useContext } from "react";
 
 export default function SettingsPanel() {
