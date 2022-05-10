@@ -15,8 +15,12 @@ import { useContext } from "react";
 export default function SettingsPanel() {
   const {
     isRunning,
-    handleToggleStatus,
+    handleToggleIsRunning,
+    isSortingOn,
+    setIsSortingOn,
     handleQuickShuffleClick,
+    makeNextStep,
+    makePreviousStep,
     selectedAlgorithm,
     setSelectedAlgorithm,
     handleSort,
@@ -24,7 +28,19 @@ export default function SettingsPanel() {
     setSpeed,
     stripesCount,
     setStripesCount,
+    clearColors,
   } = useContext(SettingsContext);
+
+  const maxSpeed = 100;
+  const handleChangeSpeed = (val) => {
+    //min speed - 1
+    // max speed - 30
+    setSpeed(maxSpeed - val);
+  };
+
+  const speedToValue = (speed) => {
+    return maxSpeed - speed;
+  };
 
   return (
     <>
@@ -36,33 +52,43 @@ export default function SettingsPanel() {
         justifyContent="center"
         gridGap="20px"
         alignItems="center">
-        <Button onClick={handleToggleStatus}>{isRunning ? "OFF" : "ON"}</Button>
+        <Button onClick={makePreviousStep}>PREV</Button>
+        <Button
+          onClick={() => {
+            isSortingOn ? handleToggleIsRunning() : handleSort();
+          }}>
+          {isRunning ? "PAUSE" : isSortingOn ? "RESUME" : "SORT"}
+        </Button>
+        <Button onClick={makeNextStep}>NEXT</Button>
         <Button onClick={handleQuickShuffleClick}>SHUFFLE</Button>
-        {/* <FormControl> */}
-        {/* <FormLabel htmlFor="algo">Algorithm</FormLabel> */}
         <Select
           id="algo"
           placeholder="Select algorithm"
-          onChange={(ev) => setSelectedAlgorithm(ev.target.value)}
+          onChange={(ev) => {
+            if (isSortingOn) {
+              clearColors();
+              setIsSortingOn(false);
+            }
+            setSelectedAlgorithm(ev.target.value);
+          }}
+          default="bubbleSort"
           width="250px">
           <option value="bubbleSort">bubbleSort</option>
           <option value="mergeSort">mergeSort</option>
         </Select>
-        {/* </FormControl> */}
         <Button onClick={handleSort}>SORT {selectedAlgorithm}</Button>
-
         <VStack minW="200px">
           <Text fontSize="xs" minW="30px">
-            Speed: {speed}
+            Speed: {speedToValue(speed)}
           </Text>
           <Slider
             colorScheme="pink"
             min={0}
-            max={30}
+            max={100}
             step={1}
             maxW="300px"
-            defaultValue={speed}
-            onChange={(val) => setSpeed(val)}>
+            defaultValue={speedToValue(speed)}
+            onChange={handleChangeSpeed}>
             <SliderTrack>
               <SliderFilledTrack />
             </SliderTrack>
