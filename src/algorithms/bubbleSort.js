@@ -11,10 +11,9 @@ const swapByIndex = (array, indexToCheck1, indexToCheck2) => {
  *
  * @param {*} array
  * @param {*} compare
- * @param {*} getValue
  * @returns ORDER[i]: currently comparing value, currently comparing value, arr, final value
  */
-export const bubbleSort = (array, compare, getValue) => {
+export const bubbleSort = (array, compare) => {
   let sorted = [...array];
   let length = array.length;
 
@@ -24,26 +23,26 @@ export const bubbleSort = (array, compare, getValue) => {
     for (let j = 0; j < length - i - 1; j++) {
       //console.log(`i: ${i} | j: ${j}`);
 
-      order.push([getValue(sorted, j), getValue(sorted, j + 1), null, null]); //comparing
+      order.push([sorted[j], sorted[j + 1], null, null]); //comparing
       if (compare(sorted[j], sorted[j + 1])) {
         sorted = swapByIndex(sorted, j, j + 1);
-        order.push([getValue(sorted, j), getValue(sorted, j + 1), [...sorted], null]);
+        order.push([sorted[j], sorted[j + 1], [...sorted], null]); //comparing - changing order
       }
     }
-    order.push([null, null, null, getValue(sorted, length - i - 1)]);
+    order.push([null, null, null, sorted[length - i - 1]]); //final value
   }
   console.log("KONIEC SORTOWANIA");
 
-  const arrays = [];
-  order.map((el, ind) => {
-    if (el[2]) {
-      arrays.push(el[2]);
-    }
-  });
+  // const arrays = [];
+  // order.map((el, ind) => {
+  //   if (el[2]) {
+  //     arrays.push(el[2]);
+  //   }
+  // });
 
-  arrays.map((stripe) => {
-    console.log(stripe[0]);
-  });
+  // arrays.map((stripe) => {
+  //   console.log(stripe[0]);
+  // });
 
   return order;
 };

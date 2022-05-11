@@ -15,6 +15,7 @@ import { useContext } from "react";
 export default function SettingsPanel() {
   const {
     isRunning,
+    setIsRunning,
     handleToggleIsRunning,
     isSortingOn,
     setIsSortingOn,
@@ -31,7 +32,7 @@ export default function SettingsPanel() {
     clearColors,
   } = useContext(SettingsContext);
 
-  const maxSpeed = 100;
+  const maxSpeed = 200;
   const handleChangeSpeed = (val) => {
     //min speed - 1
     // max speed - 30
@@ -65,9 +66,10 @@ export default function SettingsPanel() {
           id="algo"
           placeholder="Select algorithm"
           onChange={(ev) => {
+            setIsRunning(false);
+            setIsSortingOn(false);
             if (isSortingOn) {
               clearColors();
-              setIsSortingOn(false);
             }
             setSelectedAlgorithm(ev.target.value);
           }}
@@ -84,7 +86,7 @@ export default function SettingsPanel() {
           <Slider
             colorScheme="pink"
             min={0}
-            max={100}
+            max={200}
             step={1}
             maxW="300px"
             defaultValue={speedToValue(speed)}

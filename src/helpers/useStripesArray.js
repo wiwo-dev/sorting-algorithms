@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 export const useStripesArray = ({ amount }) => {
   const [stripes, setStripes] = useState([]);
   const [stripesOrdered, setStripesOrdered] = useState([]);
-  const [comparing, setComparing] = useState([null, null]);
-  const [swapping, setSwapping] = useState([null, null]);
+  const [comparing, setComparing] = useState([]);
+  const [swapping, setSwapping] = useState([]);
   const [sorted, setSorted] = useState([]);
   const [stripesCount, setStripesCount] = useState(amount ? amount : 20);
 
@@ -14,12 +14,9 @@ export const useStripesArray = ({ amount }) => {
     for (let i = 0; i < stripesCount; i++) {
       const randHeight = Math.round(Math.random() * (window.innerHeight - 200));
       arr.push({
-        height: randHeight,
-        num: i,
-        active: false,
-        position: i,
-        //color: getRandomColor(),
-        color: "grey",
+        height: randHeight, //value - heihght of the stripe
+        initialPosition: i, //to distinguish between stripes - important for animation
+        position: i, //
       });
     }
     setStripes(arr);
@@ -30,8 +27,8 @@ export const useStripesArray = ({ amount }) => {
   useEffect(() => {
     let copy = [];
     for (let i = 0; i < stripes.length; i++) {
-      copy[stripes[i].num] = stripes[i];
-      copy[stripes[i].num].position = i;
+      copy[stripes[i].initialPosition] = stripes[i];
+      copy[stripes[i].initialPosition].position = i;
     }
     setStripesOrdered(copy);
   }, [stripes]);
@@ -39,6 +36,7 @@ export const useStripesArray = ({ amount }) => {
   const clearColors = () => {
     setComparing([null, null]);
     setSorted([]);
+    setSwapping([]);
   };
 
   const compare = (a, b) => {
@@ -46,13 +44,27 @@ export const useStripesArray = ({ amount }) => {
     return false;
   };
 
-  const getValue = (array, ind) => array[ind].num;
+  const getInitialPosition = (array, ind) => array[ind].initialPosition;
 
   const getColor = (str) => {
-    if (sorted.includes(str.num)) return "green";
-    if (comparing.includes(str.num)) return "red";
-    //if (swapping.includes(str.num)) return "yellow";
-    return str.color;
+    if (sorted.includes(str)) return "green";
+    if (swapping.includes(str)) return "yellow";
+    if (comparing.includes(str)) return "red";
+    return "gray";
+  };
+
+  const swapByElements = (arr, a, b) => {
+    //a.position
+    //b.position
+
+    const copy = [...arr];
+    const temp = copy[a.position];
+    copy[a.position] = copy[b.position];
+    copy[b.position] = temp;
+
+    //arr = copy;
+
+    return copy;
   };
 
   return {
@@ -69,7 +81,8 @@ export const useStripesArray = ({ amount }) => {
     stripesCount,
     setStripesCount,
     compare,
-    getValue,
+    getInitialPosition,
     getColor,
+    swapByElements,
   };
 };

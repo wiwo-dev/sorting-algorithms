@@ -12,7 +12,7 @@ import { SettingsContext } from "helpers/SettingsContext";
 import useWindowWidth from "helpers/useWindowWidth";
 
 export default function Sort() {
-  const [speed, setSpeed] = useState(30);
+  const [speed, setSpeed] = useState(130);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState("");
 
   //for interval
@@ -45,43 +45,87 @@ export default function Sort() {
     stripesCount,
     setStripesCount,
     compare,
-    getValue,
+    getInitialPosition,
     getColor,
+    swapByElements,
   } = useStripesArray({ amount: 10 });
 
   const makeStep = (step) => {
-    const [a, b, arr, ind] = step;
+    const [a, b, arr, positionedStripe] = step;
     //comparing - red
-    if (a !== null || b !== null) setComparing([a, b]);
+    if (a !== null || b !== null) {
+      setSwapping([]);
+      setComparing([]);
+      setComparing([a, b]);
+    }
     if (arr) {
       //update order
       setStripes([...arr]);
-      if (a !== null || b !== null) setSwapping([a, b]);
+
+      if (a !== null || b !== null) {
+        setComparing([]);
+        setSwapping([a, b]);
+        //if going back (previous step) it has to swap back
+      }
     }
     ///already sorted - green
-    if (ind !== null) {
-      setSorted((prev) => [...prev, ind]);
+    if (positionedStripe !== null) {
+      setSorted((prev) => [...prev, positionedStripe]);
+      setComparing([]);
+      setSwapping([]);
     }
   };
 
   const orders = useRef([]);
   const ordersDone = useRef([]);
 
+  let lastMove = useRef(null);
+
   const makeNextStep = () => {
+    if (lastMove.current === "previous") {
+      lastMove.current = "next";
+      makeNextStep();
+    }
+
     const nextOrder = orders.current.shift();
     ordersDone.current.push(nextOrder);
     makeStep(nextOrder);
+
+    lastMove.current = "next";
   };
 
   const makePreviousStep = () => {
+    if (lastMove.current === "next") {
+      lastMove.current = "previous";
+      makePreviousStep();
+    }
+
     const previousOrder = ordersDone.current.pop();
-    orders.current.push(previousOrder);
-    makeStep(previousOrder);
+    //to remove color of previously sorted
+    const [a, b, arr, positionedStripe] = previousOrder;
+    orders.current.unshift([a, b, arr, positionedStripe]);
+    let newArr = arr;
+    if (a !== null || b !== null) setComparing([]);
+    if (arr) {
+      //update order
+      //setStripes([...arr]);
+      if (a !== null || b !== null) {
+        setSwapping([]);
+        //stepping back so should swap back
+        newArr = swapByElements([...arr], a, b);
+      }
+    }
+    //
+    makeStep([a, b, newArr, positionedStripe]);
+    if (positionedStripe !== null) setSorted((prev) => prev.filter((i) => i !== positionedStripe));
+
+    lastMove.current = "previous";
   };
 
   useInterval(() => {
     if (orders.current.length <= 0) {
       setIsSortingOn(false);
+      setIsRunning(false);
       return;
     }
     if (!isRunning) return;
@@ -93,12 +137,12 @@ export default function Sort() {
       case "mergeSort":
         setIsRunning(true);
         setIsSortingOn(true);
-        orders.current = mergeSort(stripes, compare, getValue);
+        orders.current = mergeSort(stripes, compare, getInitialPosition);
         break;
       case "bubbleSort":
         setIsRunning(true);
         setIsSortingOn(true);
-        orders.current = bubbleSort(stripes, compare, getValue);
+        orders.current = bubbleSort(stripes, compare);
         break;
       default:
         break;
@@ -110,6 +154,7 @@ export default function Sort() {
   const value = {
     stripesOrdered,
     isRunning,
+    setIsRunning,
     handleToggleIsRunning,
     isSortingOn,
     setIsSortingOn,

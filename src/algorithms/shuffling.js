@@ -27,14 +27,14 @@ export const shuffleOneStepSpecific = (array, indexToMove) => {
 };
 
 export const shuffleStepByStep = async (array, speed, onChange) => {
-  let numbersArr = [...array.map((s) => s.num + 1)];
+  let numbersArr = [...array.map((s) => s.initialPosition + 1)];
   let n = array.length;
   let copy = [...array];
   while (n) {
     // Pick a remaining element…
     let i = Math.floor(Math.random() * copy.length);
     // If not already shuffled, move it to the new array.
-    if (copy[i].num in numbersArr) {
+    if (copy[i].initialPosition in numbersArr) {
       if (speed) {
         await new Promise((resolve, reject) => {
           setTimeout(() => {
@@ -42,7 +42,7 @@ export const shuffleStepByStep = async (array, speed, onChange) => {
           }, speed);
         });
       }
-      delete numbersArr[copy[i].num];
+      delete numbersArr[copy[i].initialPosition];
       copy = shuffleOneStepSpecific(copy, i);
       //console.log(copy);
       // console.log(numbersArr);
