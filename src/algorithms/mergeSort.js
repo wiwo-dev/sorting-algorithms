@@ -1,85 +1,56 @@
-// Merges two subarrays of arr[].
-// First subarray is arr[l..m]
-// Second subarray is arr[m+1..r]
-const merge = async (arr, l, m, r, compare, order) => {
-  var n1 = m - l + 1;
-  var n2 = r - m;
+let order = [];
 
-  // Create temp arrays
-  var L = new Array(n1);
-  var R = new Array(n2);
+const merge = (dupBlocks, l, mid, r, compare) => {
+  let i = l;
+  let j = mid + 1;
 
-  // Copy data to temp arrays L[] and R[]
-  for (var i = 0; i < n1; i++) L[i] = arr[l + i];
-  for (var j = 0; j < n2; j++) R[j] = arr[m + 1 + j];
+  const arr = [];
 
-  // Merge the temp arrays back into arr[l..r]
-
-  // Initial index of first subarray
-  var i = 0;
-
-  // Initial index of second subarray
-  var j = 0;
-
-  // Initial index of merged subarray
-  var k = l;
-
-  while (i < n1 && j < n2) {
-    //compage
-    order.push([L[i], R[j], null, null]);
-
-    if (!compare(L[i], R[j])) {
-      arr[k] = L[i];
-      i++;
+  while (i <= mid && j <= r) {
+    order.push([dupBlocks[i], dupBlocks[j], null, null]); // Compare i th and j th element
+    //??????????? <=  /// >===
+    if (!compare(dupBlocks[i], dupBlocks[j])) {
+      arr.push(dupBlocks[i++]);
     } else {
-      arr[k] = R[j];
-      j++;
+      arr.push(dupBlocks[j++]);
     }
-    k++;
   }
 
-  // Copy the remaining elements of
-  // L[], if there are any
-  while (i < n1) {
-    arr[k] = L[i];
-    i++;
-    k++;
+  while (i <= mid) {
+    order.push([dupBlocks[i], null, null, null]);
+    arr.push(dupBlocks[i++]);
   }
 
-  // Copy the remaining elements of
-  // R[], if there are any
-  while (j < n2) {
-    arr[k] = R[j];
-    j++;
-    k++;
+  while (j <= r) {
+    order.push([null, dupBlocks[j], null, null]);
+    arr.push(dupBlocks[j++]);
   }
-  //console.log("dlugosc L");
-  //console.log(L.length);
-  order.push([null, null, [...arr], null]);
+
+  for (i = l; i <= r; i++) {
+    dupBlocks[i] = arr[i - l];
+    order.push([dupBlocks[i], null, dupBlocks.slice(), null]);
+  }
 };
 
-export const mergeSortHelper = async (arr, l, r, compare, order) => {
-  if (l >= r) {
-    //if(l==arr.length)
-    //order.push([null, null, null, getValue(arr, r)]);
-    //console.log(l);
-    return; //returns recursively
-  }
+const mergeSortHelper = (dupBlocks, l, r, compare) => {
+  if (l >= r) return;
 
-  var m = l + parseInt((r - l) / 2);
-  mergeSortHelper(arr, l, m, compare, order);
-  mergeSortHelper(arr, m + 1, r, compare, order);
+  const mid = Math.floor((l + r) / 2);
 
-  merge(arr, l, m, r, compare, order);
+  mergeSortHelper(dupBlocks, l, mid, compare);
+  mergeSortHelper(dupBlocks, mid + 1, r, compare);
+
+  merge(dupBlocks, l, mid, r, compare);
 };
 
-export const mergeSort = (arr, compare) => {
-  let order = [];
-  let copy = [...arr];
-  mergeSortHelper(copy, 0, copy.length - 1, compare, order);
+export const mergeSort = (blocks, compare) => {
+  order = [];
+  const dupBlocks = blocks.slice(); // copying blocks array
 
-  for (let i = 0; i < copy.length; i++) {
-    order.push([null, null, null, copy[i]]); // i th element will be in correct position: ;
+  mergeSortHelper(dupBlocks, 0, dupBlocks.length - 1, compare);
+
+  for (let i = 0; i < dupBlocks.length; i++) {
+    order.push([null, null, null, dupBlocks[i]]); // i th element will be in correct position
   }
 
   return order;

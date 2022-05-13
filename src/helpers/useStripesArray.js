@@ -54,17 +54,13 @@ export const useStripesArray = ({ amount }) => {
     return "gray.100";
   };
 
+  //swapping elements and returning new array (copy)
+  //not changing the source array
   const swapByElements = (arr, a, b) => {
-    //a.position
-    //b.position
-
     const copy = [...arr];
     const temp = copy[a.position];
     copy[a.position] = copy[b.position];
     copy[b.position] = temp;
-
-    //arr = copy;
-
     return copy;
   };
 

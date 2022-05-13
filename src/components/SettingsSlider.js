@@ -19,7 +19,8 @@ export default function SettingsSlider({ label, value, ...rest }) {
           borderColor="black"
           borderWidth="2px"
           alignItems="center"
-          justifyContent="center">
+          justifyContent="center"
+          boxShadow="2px 2px 0px rgba(0, 0, 0, 0.5)">
           <Text fontFamily="Comfortaa" fontWeight={700} color="black" fontSize="10px">
             {value}
           </Text>

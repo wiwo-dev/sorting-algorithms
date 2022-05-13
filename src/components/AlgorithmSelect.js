@@ -23,6 +23,8 @@ export default function AlgorithmSelect() {
       boxShadow="2px 2px 0px rgba(0, 0, 0, 0.5)"
       _hover={{ borderColor: "black", boxShadow: "2px 2px 0px rgba(0, 0, 0, 0.5)" }}>
       <option value="bubbleSort">bubbleSort</option>
+      <option value="selectionSort">selectionSort</option>
+      <option value="insertionSort">insertionSort</option>
       <option value="mergeSort">mergeSort</option>
       <option value="quickSort">quickSort</option>
     </Select>

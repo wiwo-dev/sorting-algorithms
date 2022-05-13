@@ -12,7 +12,13 @@ export default function StripesPanel() {
   const stripeWidth = 20;
 
   return (
-    <Box position="relative" height={window.innerHeight - 100} borderTopWidth="0px" borderColor="gray.100">
+    <Box
+      position="relative"
+      height={window.innerHeight - 100}
+      borderTopWidth="0px"
+      borderColor="gray.100"
+      marginTop="-2px"
+      zIndex={0}>
       {stripesOrdered.map((str, i) => {
         const distance = windowWidth / stripesCount;
         return (
@@ -21,17 +27,15 @@ export default function StripesPanel() {
             key={i}
             animate={{ x: str.position * distance + distance / 2 - stripeWidth / 2 }}
             transition={{ duration: 0.1 }}
-            boxShadow="2px 2px 0px rgba(0, 0, 0, 0.5)"
-            borderWidth="1px"
+            boxShadow="2px 2px 1px rgba(0, 0, 0, 0.3)"
+            borderWidth="2px"
             borderTopWidth="0px"
             borderColor="black"
             roundedBottom={"full"}
             bgColor={getColor(str)}
-            style={{
-              position: "absolute",
-              height: `${str.height}px`,
-              width: `${stripeWidth}px`,
-            }}></Box>
+            position="absolute"
+            height={`${str.height}px`}
+            width={`${stripeWidth}px`}></Box>
         );
       })}
     </Box>
