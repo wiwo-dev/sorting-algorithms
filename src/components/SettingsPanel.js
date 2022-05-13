@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  HStack,
   Select,
   Slider,
   SliderFilledTrack,
@@ -12,24 +13,25 @@ import {
 import { SettingsContext } from "helpers/SettingsContext";
 import { useContext } from "react";
 
+import { Icon } from "@chakra-ui/react";
+import { RiSortDesc } from "react-icons/ri";
+
 export default function SettingsPanel() {
   const {
-    isRunning,
-    setIsRunning,
-    handleToggleIsRunning,
-    isSortingOn,
-    setIsSortingOn,
-    handleQuickShuffleClick,
+    handleShuffleButtonClick,
+    handleSortPauseResumeButtonClick,
     makeNextStep,
+    handlePrevButtonClick,
+    handleNextButtonClick,
     makePreviousStep,
     selectedAlgorithm,
-    setSelectedAlgorithm,
+    handleAlgorithmChange,
     handleSort,
     speed,
     setSpeed,
     stripesCount,
     setStripesCount,
-    clearColors,
+    sortingStatus,
   } = useContext(SettingsContext);
 
   const maxSpeed = 200;
@@ -45,40 +47,51 @@ export default function SettingsPanel() {
 
   return (
     <>
+      <Box bgColor="gray.400">{sortingStatus}</Box>
       <Box
         minH="70px"
         bgColor="orange.200"
         display="flex"
+        flexDirection={["column", "row"]}
         flexWrap="wrap"
         justifyContent="center"
         gridGap="20px"
-        alignItems="center">
-        <Button onClick={makePreviousStep}>PREV</Button>
-        <Button
-          onClick={() => {
-            isSortingOn ? handleToggleIsRunning() : handleSort();
-          }}>
-          {isRunning ? "PAUSE" : isSortingOn ? "RESUME" : "SORT"}
-        </Button>
-        <Button onClick={makeNextStep}>NEXT</Button>
-        <Button onClick={handleQuickShuffleClick}>SHUFFLE</Button>
+        alignItems="center"
+        paddingY="20px">
         <Select
+          icon={<Icon as={RiSortDesc} />}
           id="algo"
           placeholder="Select algorithm"
           onChange={(ev) => {
-            setIsRunning(false);
-            setIsSortingOn(false);
-            if (isSortingOn) {
-              clearColors();
-            }
-            setSelectedAlgorithm(ev.target.value);
+            handleAlgorithmChange(ev.target.value);
           }}
           default="bubbleSort"
           width="250px">
           <option value="bubbleSort">bubbleSort</option>
           <option value="mergeSort">mergeSort</option>
+          <option value="quickSort">quickSort</option>
         </Select>
-        <Button onClick={handleSort}>SORT {selectedAlgorithm}</Button>
+        <HStack>
+          <Button
+            disabled={
+              sortingStatus === "NO_ORDERS" ||
+              sortingStatus === "FIRST_ORDER_WAITING" ||
+              sortingStatus === "ORDERS_RUNNING"
+            }
+            onClick={handlePrevButtonClick}>
+            PREV
+          </Button>
+          <Button disabled={!selectedAlgorithm} onClick={handleSortPauseResumeButtonClick}>
+            {sortingStatus === "ORDERS_RUNNING" ? "PAUSE" : sortingStatus === "ORDERS_WAITING" ? "RESUME" : "SORT"}
+          </Button>
+          <Button
+            disabled={sortingStatus === "ORDERS_FINISHED" || !selectedAlgorithm || sortingStatus === "ORDERS_RUNNING"}
+            onClick={handleNextButtonClick}>
+            NEXT
+          </Button>
+        </HStack>
+
+        <Button onClick={handleShuffleButtonClick}>SHUFFLE</Button>
         <VStack minW="200px">
           <Text fontSize="xs" minW="30px">
             Speed: {speedToValue(speed)}

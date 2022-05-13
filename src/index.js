@@ -7,6 +7,11 @@ import { extendTheme } from "@chakra-ui/react";
 import { theme } from "theme";
 import { ChakraProvider } from "@chakra-ui/react";
 
+import "@fontsource/comfortaa/400.css";
+import "@fontsource/comfortaa/700.css";
+
+import "focus-visible/dist/focus-visible";
+
 ReactDOM.render(
   <BrowserRouter>
     <React.StrictMode>

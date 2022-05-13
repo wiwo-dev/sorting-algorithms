@@ -1,7 +1,7 @@
 // Merges two subarrays of arr[].
 // First subarray is arr[l..m]
 // Second subarray is arr[m+1..r]
-const merge = async (arr, l, m, r, compare, order, getValue) => {
+const merge = async (arr, l, m, r, compare, order) => {
   var n1 = m - l + 1;
   var n2 = r - m;
 
@@ -26,7 +26,7 @@ const merge = async (arr, l, m, r, compare, order, getValue) => {
 
   while (i < n1 && j < n2) {
     //compage
-    order.push([getValue(L, i), getValue(R, j), null, null]);
+    order.push([L[i], R[j], null, null]);
 
     if (!compare(L[i], R[j])) {
       arr[k] = L[i];
@@ -58,7 +58,7 @@ const merge = async (arr, l, m, r, compare, order, getValue) => {
   order.push([null, null, [...arr], null]);
 };
 
-export const mergeSortHelper = async (arr, l, r, compare, order, getValue) => {
+export const mergeSortHelper = async (arr, l, r, compare, order) => {
   if (l >= r) {
     //if(l==arr.length)
     //order.push([null, null, null, getValue(arr, r)]);
@@ -67,19 +67,19 @@ export const mergeSortHelper = async (arr, l, r, compare, order, getValue) => {
   }
 
   var m = l + parseInt((r - l) / 2);
-  mergeSortHelper(arr, l, m, compare, order, getValue);
-  mergeSortHelper(arr, m + 1, r, compare, order, getValue);
+  mergeSortHelper(arr, l, m, compare, order);
+  mergeSortHelper(arr, m + 1, r, compare, order);
 
-  merge(arr, l, m, r, compare, order, getValue);
+  merge(arr, l, m, r, compare, order);
 };
 
-export const mergeSort = (arr, compare, getValue) => {
+export const mergeSort = (arr, compare) => {
   let order = [];
   let copy = [...arr];
-  mergeSortHelper(copy, 0, copy.length - 1, compare, order, getValue);
+  mergeSortHelper(copy, 0, copy.length - 1, compare, order);
 
   for (let i = 0; i < copy.length; i++) {
-    order.push([null, null, null, getValue(copy, i)]); // i th element will be in correct position: ;
+    order.push([null, null, null, copy[i]]); // i th element will be in correct position: ;
   }
 
   return order;

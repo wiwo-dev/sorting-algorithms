@@ -1,36 +1,19 @@
 import { Box } from "@chakra-ui/react";
 import { bubbleSort } from "algorithms/bubbleSort";
 import { mergeSort } from "algorithms/mergeSort";
+import { quickSort } from "algorithms/quickSort";
 import { shuffleStepByStep } from "algorithms/shuffling";
 import { useStripesArray } from "helpers/useStripesArray";
-import { createContext, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useInterval } from "helpers/useInterval";
+import { motion, AnimatePresence } from "framer-motion";
 import SettingsPanel from "components/SettingsPanel";
-import { motion } from "framer-motion";
-
+import SettingsPanelNew from "components/SettingsPanelNew";
 import { SettingsContext } from "helpers/SettingsContext";
 import useWindowWidth from "helpers/useWindowWidth";
+import StripesPanel from "components/StripesPanel";
 
 export default function Sort() {
-  const [speed, setSpeed] = useState(130);
-  const [selectedAlgorithm, setSelectedAlgorithm] = useState("");
-
-  //for interval
-  const [isRunning, setIsRunning] = useState(false);
-
-  //for start or resume/pause
-  const [isSortingOn, setIsSortingOn] = useState(false);
-
-  const handleToggleIsRunning = () => {
-    setIsRunning((prev) => !prev);
-  };
-
-  const handleQuickShuffleClick = async () => {
-    clearColors();
-    setIsSortingOn(false);
-    shuffleStepByStep(stripes, 0, setStripes);
-  };
-
   const {
     stripes,
     setStripes,
@@ -50,7 +33,50 @@ export default function Sort() {
     swapByElements,
   } = useStripesArray({ amount: 10 });
 
+  const [speed, setSpeed] = useState(130);
+  const [selectedAlgorithm, setSelectedAlgorithm] = useState("");
+
+  //SORTING STATUS
+  // NO_ORDERS
+  // ORDERS_WAITING = FIRST DONE WHEN GOING BACKWARDS
+  // FIRST_ORDER_WAITING
+  // ORDERS_RUNNING
+  // ORDERS_FINISHED - LAST DONE
+  //running interval
+  //sorting was done and orders are available
+  const [sortingStatus, setSortingStatus] = useState("NO_ORDERS");
+
+  const orders = useRef([]);
+  const ordersDone = useRef([]);
+
+  let [lastMove, setLastMove] = useState("first");
+
+  const handleAlgorithmChange = (algorithm) => {
+    setSelectedAlgorithm(algorithm);
+    orders.current = [];
+    ordersDone.current = [];
+    clearColors();
+    setSortingStatus("NO_ORDERS");
+  };
+
+  const handleSortPauseResumeButtonClick = () => {
+    sortingStatus === "ORDERS_WAITING" && setSortingStatus("ORDERS_RUNNING");
+    sortingStatus === "ORDERS_RUNNING" && setSortingStatus("ORDERS_WAITING");
+    sortingStatus === "NO_ORDERS" &&
+      (() => {
+        handleSort("RUN");
+        setSortingStatus("ORDERS_RUNNING");
+      })();
+  };
+
+  const handleShuffleButtonClick = async () => {
+    clearColors();
+    setSortingStatus("NO_ORDERS");
+    shuffleStepByStep(stripes, 0, setStripes);
+  };
+
   const makeStep = (step) => {
+    //setSortingStatus("ORDERS_WAITING");
     const [a, b, arr, positionedStripe] = step;
     //comparing - red
     if (a !== null || b !== null) {
@@ -61,11 +87,9 @@ export default function Sort() {
     if (arr) {
       //update order
       setStripes([...arr]);
-
       if (a !== null || b !== null) {
         setComparing([]);
         setSwapping([a, b]);
-        //if going back (previous step) it has to swap back
       }
     }
     ///already sorted - green
@@ -76,29 +100,52 @@ export default function Sort() {
     }
   };
 
-  const orders = useRef([]);
-  const ordersDone = useRef([]);
-
-  let lastMove = useRef(null);
-
   const makeNextStep = () => {
-    if (lastMove.current === "previous") {
-      lastMove.current = "next";
-      makeNextStep();
+    if (!orders.current.length) {
+      setLastMove("last");
+      setSortingStatus("ORDERS_FINISHED");
+      console.log("ORDERS_FINISHED");
+      return;
     }
-
     const nextOrder = orders.current.shift();
     ordersDone.current.push(nextOrder);
     makeStep(nextOrder);
+    setLastMove("next");
+    if (!orders.current.length) {
+      setLastMove("last");
+      setSortingStatus("ORDERS_FINISHED");
+    }
+  };
 
-    lastMove.current = "next";
+  const handleNextButtonClick = () => {
+    if (sortingStatus === "NO_ORDERS") {
+      handleSort();
+      setSortingStatus("ORDERS_WAITING");
+      console.log("BUTTON PRESSED");
+    }
+    makeNextStep();
+  };
+
+  const handlePrevButtonClick = () => {
+    makePreviousStep();
   };
 
   const makePreviousStep = () => {
-    if (lastMove.current === "next") {
-      lastMove.current = "previous";
-      makePreviousStep();
+    if (!ordersDone.current.length) {
+      clearColors();
+      setComparing([]);
+      setSwapping([]);
+      setLastMove("first");
+      setSortingStatus("FIRST_ORDER_WAITING");
+      console.log("FIRST_ORDER_WAITING");
+      return;
     }
+
+    //to avoid the need to double click
+    // if (lastMove === "next") {
+    //   setLastMove("previous");
+    //   //makePreviousStep();
+    // }
 
     const previousOrder = ordersDone.current.pop();
     //to remove color of previously sorted
@@ -119,30 +166,44 @@ export default function Sort() {
     makeStep([a, b, newArr, positionedStripe]);
     if (positionedStripe !== null) setSorted((prev) => prev.filter((i) => i !== positionedStripe));
 
-    lastMove.current = "previous";
+    setLastMove("previous");
   };
 
   useInterval(() => {
     if (orders.current.length <= 0) {
-      setIsSortingOn(false);
-      setIsRunning(false);
+      sortingStatus !== "NO_ORDERS" && setSortingStatus("ORDERS_FINISHED");
       return;
     }
-    if (!isRunning) return;
+    if (sortingStatus !== "ORDERS_RUNNING") return;
     makeNextStep();
+    setSortingStatus("ORDERS_RUNNING");
   }, speed);
 
-  const handleSort = async () => {
+  const handleSort = async (mode = "RUN") => {
+    //mode: RUN, ONE
     switch (selectedAlgorithm) {
       case "mergeSort":
-        setIsRunning(true);
-        setIsSortingOn(true);
-        orders.current = mergeSort(stripes, compare, getInitialPosition);
+        orders.current = mergeSort(stripes, compare);
+
+        setSortingStatus("ORDERS_WAITING");
+        if (mode === "RUN") {
+          setSortingStatus("ORDERS_RUNNING");
+        }
         break;
       case "bubbleSort":
-        setIsRunning(true);
-        setIsSortingOn(true);
         orders.current = bubbleSort(stripes, compare);
+
+        setSortingStatus("ORDERS_WAITING");
+        if (mode === "RUN") {
+          setSortingStatus("ORDERS_RUNNING");
+        }
+        break;
+      case "quickSort":
+        orders.current = quickSort(stripes, compare);
+        setSortingStatus("ORDERS_WAITING");
+        if (mode === "RUN") {
+          setSortingStatus("ORDERS_RUNNING");
+        }
         break;
       default:
         break;
@@ -151,18 +212,19 @@ export default function Sort() {
 
   const { width: windowWidth } = useWindowWidth();
 
+  const stripeWidth = 20;
+
   const value = {
     stripesOrdered,
-    isRunning,
-    setIsRunning,
-    handleToggleIsRunning,
-    isSortingOn,
-    setIsSortingOn,
+    handleSortPauseResumeButtonClick,
     makeNextStep,
+    handleNextButtonClick,
+    handlePrevButtonClick,
     makePreviousStep,
-    handleQuickShuffleClick,
+    handleShuffleButtonClick,
     selectedAlgorithm,
     setSelectedAlgorithm,
+    handleAlgorithmChange,
     handleSort,
     speed,
     setSpeed,
@@ -170,31 +232,16 @@ export default function Sort() {
     setStripesCount,
     getColor,
     clearColors,
+    lastMove,
+    sortingStatus,
+    setSortingStatus,
   };
-
-  const stripeWidth = 20;
 
   return (
     <SettingsContext.Provider value={value}>
       <Box>
-        <SettingsPanel />
-        <Box position="relative" height={window.innerHeight - 100}>
-          {stripesOrdered.map((str, i) => {
-            const distance = windowWidth / stripesCount;
-            return (
-              <motion.div
-                key={i}
-                animate={{ x: str.position * distance + distance / 2 - stripeWidth / 2 }}
-                transition={{ duration: 0.1 }}
-                style={{
-                  position: "absolute",
-                  height: `${str.height}px`,
-                  width: `${stripeWidth}px`,
-                  background: getColor(str),
-                }}></motion.div>
-            );
-          })}
-        </Box>
+        <SettingsPanelNew />
+        <StripesPanel />
       </Box>
     </SettingsContext.Provider>
   );

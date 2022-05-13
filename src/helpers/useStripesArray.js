@@ -34,23 +34,24 @@ export const useStripesArray = ({ amount }) => {
   }, [stripes]);
 
   const clearColors = () => {
-    setComparing([null, null]);
+    setComparing([]);
     setSorted([]);
     setSwapping([]);
   };
 
   const compare = (a, b) => {
-    if (a.height > b.height) return true;
+    if (a.height === b.height) return "EQUAL";
+    if (a.height >= b.height) return true;
     return false;
   };
 
   const getInitialPosition = (array, ind) => array[ind].initialPosition;
 
   const getColor = (str) => {
-    if (sorted.includes(str)) return "green";
-    if (swapping.includes(str)) return "yellow";
-    if (comparing.includes(str)) return "red";
-    return "gray";
+    if (sorted.includes(str)) return "green.100";
+    if (swapping.includes(str)) return "yellow.100";
+    if (comparing.includes(str)) return "violet.100";
+    return "gray.100";
   };
 
   const swapByElements = (arr, a, b) => {
