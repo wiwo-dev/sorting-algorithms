@@ -4,13 +4,14 @@ import useWindowWidth from "helpers/useWindowWidth";
 import React, { useContext } from "react";
 import SettingsSlider from "./SettingsSlider";
 
-export default function SpeedLengthSliders({ speedToValue, handleChangeSpeed }) {
-  const { stripeWidth, setStripesCount, speed, setSpeed, stripesCount } = useContext(SettingsContext);
+export default function SpeedLengthSliders({}) {
+  const { stripeWidth, setStripesCount, speed, setSpeed, speedToValue, handleSpeedChange, stripesCount } =
+    useContext(SettingsContext);
 
   const { width: windowWidth } = useWindowWidth();
 
   return (
-    <VStack>
+    <VStack alignItems={"start"}>
       <SettingsSlider
         label="Speed"
         min={1}
@@ -18,7 +19,7 @@ export default function SpeedLengthSliders({ speedToValue, handleChangeSpeed }) 
         step={1}
         value={speedToValue(speed)}
         defaultValue={speedToValue(speed)}
-        onChange={handleChangeSpeed}
+        onChange={handleSpeedChange}
       />
       <SettingsSlider
         label="Length"

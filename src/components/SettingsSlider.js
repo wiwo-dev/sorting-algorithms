@@ -6,9 +6,11 @@ export default function SettingsSlider({ label, value, ...rest }) {
 
   return (
     <HStack>
-      <Text fontFamily="Comfortaa" fontWeight={700} color="white" marginRight="10px">
-        {label}
-      </Text>
+      {label && (
+        <Text fontFamily="Comfortaa" fontWeight={700} color="white" marginRight="10px">
+          {label}
+        </Text>
+      )}
       <Slider minW="200px" colorScheme="pink" step={1} maxW="300px" {...rest}>
         <SliderTrack height="10px" rounded="lg" borderColor="black" borderWidth="2px">
           <SliderFilledTrack bgColor="yellow.100" />
@@ -16,6 +18,7 @@ export default function SettingsSlider({ label, value, ...rest }) {
         <SliderThumb
           boxSize={6}
           bgColor="yellow.100"
+          _hover={{ bg: "yellow.200" }}
           borderColor="black"
           borderWidth="2px"
           alignItems="center"

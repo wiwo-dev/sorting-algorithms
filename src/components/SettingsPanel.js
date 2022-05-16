@@ -1,4 +1,15 @@
-import { Box, HStack, Icon, SliderFilledTrack, SliderThumb, SliderTrack, Text, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Grid,
+  GridItem,
+  HStack,
+  Icon,
+  SliderFilledTrack,
+  SliderThumb,
+  SliderTrack,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import SettingsSlider from "components/SettingsSlider";
 import React, { useContext, useState } from "react";
 import AlgorithmSelect from "./AlgorithmSelect";
@@ -11,33 +22,17 @@ import { MdExpandMore, MdExpandLess } from "react-icons/md";
 import { motion, AnimatePresence } from "framer-motion";
 import { SettingsContext } from "helpers/SettingsContext";
 import SpeedLengthSliders from "./SpeedLengthSliders";
+import SortingVisualizerLogo from "./SortingVisualizerLogo";
+import ControlButton from "./ControlButton";
 
-export default function SettingsPanel() {
-  const { stripeWidth, setStripesCount, speed, setSpeed, stripesCount } = useContext(SettingsContext);
+import { TiInfoLarge } from "react-icons/ti";
+
+export default function SettingsPanel({ onModalOpen }) {
+  const { stripeWidth, setStripesCount, speed, setSpeed, speedToValue, handleSpeedChange, stripesCount } =
+    useContext(SettingsContext);
 
   const [isMenuOpen, setIsMenuOpen] = useState(true);
   const { width: windowWidth } = useWindowWidth();
-
-  //const maxSpeed = 300;
-
-  const speeds = {
-    1: 400,
-    2: 300,
-    3: 200,
-    4: 100,
-    5: 2,
-  };
-
-  const handleChangeSpeed = (val) => {
-    setSpeed(speeds[val]);
-  };
-  const speedToValue = (speed) => {
-    function getKeyByValue(object, value) {
-      return Object.keys(object).find((key) => object[key] === value);
-    }
-    return getKeyByValue(speeds, speed);
-    //return maxSpeed - speed;
-  };
 
   const mobileMenuHeight = "210px";
 
@@ -56,7 +51,6 @@ export default function SettingsPanel() {
             position={"absolute"}
             bottom={"0px"}
             height={mobileMenuHeight}
-            //bgColor={"pink"}
             width="100%"
             display="flex"
             flexWrap="wrap"
@@ -64,8 +58,49 @@ export default function SettingsPanel() {
             flexDirection={"column"}
             gridGap="20px"
             alignItems="center">
-            <AlgorithmSelect />
-            <SpeedLengthSliders handleChangeSpeed={handleChangeSpeed} speedToValue={speedToValue} />
+            <Grid templateColumns="repeat(2, 1fr)" gap={2} width="310px">
+              <GridItem w="100%" display={"fles"} alignItems={"center"} justifyContent={"flex-start"}>
+                <Text fontFamily="Comfortaa" fontWeight={700} color="white">
+                  Algorithm:
+                </Text>
+              </GridItem>
+              <GridItem w="100%">
+                <AlgorithmSelect width="200px" />
+              </GridItem>
+
+              <GridItem w="100%" display={"fles"} alignItems={"center"} justifyContent={"flex-start"}>
+                <Text fontFamily="Comfortaa" fontWeight={700} color="white">
+                  Speed:
+                </Text>
+              </GridItem>
+              <GridItem w="100%">
+                <SettingsSlider
+                  //label="Speed"
+                  min={1}
+                  max={5}
+                  step={1}
+                  value={speedToValue(speed)}
+                  defaultValue={speedToValue(speed)}
+                  onChange={handleSpeedChange}
+                />
+              </GridItem>
+              <GridItem w="100%" display={"fles"} alignItems={"center"} justifyContent={"flex-start"}>
+                <Text fontFamily="Comfortaa" fontWeight={700} color="white">
+                  Speed:
+                </Text>
+              </GridItem>
+              <GridItem w="100%">
+                <SettingsSlider
+                  //label="Length"
+                  min={0}
+                  max={Math.floor(windowWidth / (stripeWidth + 10))}
+                  value={stripesCount}
+                  defaultValue={stripesCount}
+                  onChange={setStripesCount}
+                />
+              </GridItem>
+            </Grid>
+
             <Controls />
             <Icon
               position="absolute"
@@ -88,12 +123,57 @@ export default function SettingsPanel() {
           flexWrap="wrap"
           padding="20px"
           zIndex={10}
-          position={"relative"}>
-          <VStack>
-            <AlgorithmSelect />
+          position={"relative"}
+          paddingLeft={windowWidth < 950 ? "150px" : "0px"}>
+          <HStack justifyContent={"space-around"} width={"100%"} maxW={"1000px"}>
+            <Box position="absolute" left="30px">
+              <SortingVisualizerLogo />
+            </Box>
+
+            <Grid templateColumns="repeat(2, 1fr)" gap={2} width="310px">
+              <GridItem w="100%" display={"fles"} alignItems={"center"} justifyContent={"flex-start"}>
+                <Text fontFamily="Comfortaa" fontWeight={700} color="white">
+                  Algorithm:
+                </Text>
+              </GridItem>
+              <GridItem w="100%">
+                <AlgorithmSelect width="200px" />
+              </GridItem>
+
+              <GridItem w="100%" display={"fles"} alignItems={"center"} justifyContent={"flex-start"}>
+                <Text fontFamily="Comfortaa" fontWeight={700} color="white">
+                  Speed:
+                </Text>
+              </GridItem>
+              <GridItem w="100%">
+                <SettingsSlider
+                  //label="Speed"
+                  min={1}
+                  max={5}
+                  step={1}
+                  value={speedToValue(speed)}
+                  defaultValue={speedToValue(speed)}
+                  onChange={handleSpeedChange}
+                />
+              </GridItem>
+              <GridItem w="100%" display={"fles"} alignItems={"center"} justifyContent={"flex-start"}>
+                <Text fontFamily="Comfortaa" fontWeight={700} color="white">
+                  Length:
+                </Text>
+              </GridItem>
+              <GridItem w="100%">
+                <SettingsSlider
+                  //label="Length"
+                  min={0}
+                  max={Math.floor(windowWidth / (stripeWidth + 10))}
+                  value={stripesCount}
+                  defaultValue={stripesCount}
+                  onChange={setStripesCount}
+                />
+              </GridItem>
+            </Grid>
             <Controls />
-          </VStack>
-          <SpeedLengthSliders handleChangeSpeed={handleChangeSpeed} speedToValue={speedToValue} />
+          </HStack>
         </Box>
       )}
     </>

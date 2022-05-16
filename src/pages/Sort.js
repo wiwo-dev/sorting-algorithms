@@ -14,7 +14,9 @@ import SettingsPanel from "components/SettingsPanel";
 import { SettingsContext } from "helpers/SettingsContext";
 import useWindowWidth from "helpers/useWindowWidth";
 import StripesPanel from "components/StripesPanel";
-import InfoModal from "components/InfoModal";
+import InfoModal from "components/InfoModal/InfoModal";
+import ControlButton from "components/ControlButton";
+import { TiInfoLarge } from "react-icons/ti";
 
 export default function Sort() {
   const { width: windowWidth } = useWindowWidth();
@@ -38,10 +40,30 @@ export default function Sort() {
     getInitialPosition,
     getColor,
     swapByElements,
-  } = useStripesArray({ amount: Math.floor(windowWidth / (stripeWidth + 10) / 2) });
+  } = useStripesArray({ amount: Math.floor((windowWidth < 1000 ? windowWidth : 1000) / (stripeWidth + 10) / 2) });
 
   const [speed, setSpeed] = useState(400);
-  const [selectedAlgorithm, setSelectedAlgorithm] = useState("");
+
+  const speeds = {
+    1: 400,
+    2: 300,
+    3: 200,
+    4: 100,
+    5: 2,
+  };
+
+  const handleSpeedChange = (val) => {
+    setSpeed(speeds[val]);
+  };
+  const speedToValue = (speed) => {
+    function getKeyByValue(object, value) {
+      return Object.keys(object).find((key) => object[key] === value);
+    }
+    return getKeyByValue(speeds, speed);
+    //return maxSpeed - speed;
+  };
+
+  const [selectedAlgorithm, setSelectedAlgorithm] = useState("bubbleSort");
 
   //SORTING STATUS
   // NO_ORDERS
@@ -202,6 +224,8 @@ export default function Sort() {
     handleSort,
     speed,
     setSpeed,
+    handleSpeedChange,
+    speedToValue,
     stripesCount,
     setStripesCount,
     getColor,
@@ -219,10 +243,13 @@ export default function Sort() {
   return (
     <SettingsContext.Provider value={value}>
       <Box>
-        <SettingsPanel />
+        <Box position="fixed" right="30px" bottom="30px" zIndex={200}>
+          <ControlButton icon={TiInfoLarge} onClick={onOpen} normalTooltip="Instruction" />
+        </Box>
+        <SettingsPanel onModalOpen={onOpen} />
         <StripesPanel />
+
         <InfoModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
-        <Button onClick={onOpen}>Open Modal</Button>
       </Box>
     </SettingsContext.Provider>
   );

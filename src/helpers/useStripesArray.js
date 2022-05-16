@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import useWindowHeight from "./useWindowHeight";
+import useWindowWidth from "./useWindowWidth";
 
 export const useStripesArray = ({ amount }) => {
   const [stripes, setStripes] = useState([]);
@@ -8,11 +10,12 @@ export const useStripesArray = ({ amount }) => {
   const [sorted, setSorted] = useState([]);
   const [stripesCount, setStripesCount] = useState(amount ? amount : 20);
 
-  //for each change of amount of stripes
-  useEffect(() => {
+  const { height: windowHeight } = useWindowHeight();
+
+  const resetAllStripes = () => {
     const arr = [];
     for (let i = 0; i < stripesCount; i++) {
-      const randHeight = Math.round(Math.random() * (window.innerHeight - 200));
+      const randHeight = Math.round(Math.random() * (windowHeight - 200));
       arr.push({
         height: randHeight, //value - heihght of the stripe
         initialPosition: i, //to distinguish between stripes - important for animation
@@ -21,6 +24,11 @@ export const useStripesArray = ({ amount }) => {
     }
     setStripes(arr);
     clearColors();
+  };
+
+  //for each change of amount of stripes
+  useEffect(() => {
+    resetAllStripes();
   }, [stripesCount]);
 
   //to set ordered stripes to make animation work
