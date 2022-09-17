@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/sorting-algorithms/static/css/main.d41cfac0.css",
+    "main.js": "/sorting-algorithms/static/js/main.9c2cbba1.js",
+    "static/media/comfortaa-all-400-normal.woff": "/sorting-algorithms/static/media/comfortaa-all-400-normal.ce102a58deaac29dcd38.woff",
+    "static/media/comfortaa-all-700-normal.woff": "/sorting-algorithms/static/media/comfortaa-all-700-normal.bef9fdb7bb2a5067e703.woff",
+    "static/media/comfortaa-latin-400-normal.woff2": "/sorting-algorithms/static/media/comfortaa-latin-400-normal.c34bd7a05a405c54c9cc.woff2",
+    "static/media/comfortaa-latin-700-normal.woff2": "/sorting-algorithms/static/media/comfortaa-latin-700-normal.441d822d6155ffc02adf.woff2",
+    "static/media/comfortaa-latin-ext-700-normal.woff2": "/sorting-algorithms/static/media/comfortaa-latin-ext-700-normal.c25db6d109887a9e1be5.woff2",
+    "static/media/comfortaa-latin-ext-400-normal.woff2": "/sorting-algorithms/static/media/comfortaa-latin-ext-400-normal.b47af297e0ff4c37e44a.woff2",
+    "static/media/comfortaa-cyrillic-400-normal.woff2": "/sorting-algorithms/static/media/comfortaa-cyrillic-400-normal.1601524e3e8c67280367.woff2",
+    "static/media/comfortaa-cyrillic-700-normal.woff2": "/sorting-algorithms/static/media/comfortaa-cyrillic-700-normal.63a23218bb7d9896015b.woff2",
+    "static/media/comfortaa-cyrillic-ext-700-normal.woff2": "/sorting-algorithms/static/media/comfortaa-cyrillic-ext-700-normal.cf3c095d79a0979b5a71.woff2",
+    "static/media/comfortaa-cyrillic-ext-400-normal.woff2": "/sorting-algorithms/static/media/comfortaa-cyrillic-ext-400-normal.1537ece36ce5322e6a78.woff2",
+    "static/media/comfortaa-greek-400-normal.woff2": "/sorting-algorithms/static/media/comfortaa-greek-400-normal.399c6854261da1738767.woff2",
+    "static/media/comfortaa-greek-700-normal.woff2": "/sorting-algorithms/static/media/comfortaa-greek-700-normal.85803872546e4ba9f50c.woff2",
+    "static/media/comfortaa-vietnamese-400-normal.woff2": "/sorting-algorithms/static/media/comfortaa-vietnamese-400-normal.a02db6c45ccf0a974a51.woff2",
+    "static/media/comfortaa-vietnamese-700-normal.woff2": "/sorting-algorithms/static/media/comfortaa-vietnamese-700-normal.f880d11841d455eedc66.woff2",
+    "index.html": "/sorting-algorithms/index.html",
+    "main.d41cfac0.css.map": "/sorting-algorithms/static/css/main.d41cfac0.css.map",
+    "main.9c2cbba1.js.map": "/sorting-algorithms/static/js/main.9c2cbba1.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d41cfac0.css",
+    "static/js/main.9c2cbba1.js"
+  ]
+}
