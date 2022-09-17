@@ -28,7 +28,8 @@ function App({}) {
       <Global styles={GlobalStyles} />
 
       <Box width={windowWidth} bgColor="white" position="relative" overflowX="hidden">
-        <Box
+        <Sort />
+        {/* <Box
           className="transition-all"
           display="flex"
           gridGap="20px"
@@ -43,12 +44,12 @@ function App({}) {
           <Link href="/board">BOARD</Link>
         </Box>
         <Switch>
-          {/* <Route path="/" render={() => <Testowa />} /> */}
+          
 
           <Route path="/sort" render={() => <Sort />} />
 
           <Route path="/board" render={() => <PathfinderBoard />} />
-        </Switch>
+        </Switch> */}
       </Box>
     </>
   );

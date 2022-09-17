@@ -1,6 +1,7 @@
 {
   "name": "pursuit",
   "version": "0.1.0",
+  "homepage": "https://wiwo-one.github.io/sorting-algorithms",
   "private": true,
   "dependencies": {
     "@chakra-ui/icons": "^1.0.15",
@@ -28,7 +29,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "servebuild": "node server.js"
+    "servebuild": "node server.js",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -50,6 +53,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.4",
+    "gh-pages": "^4.0.0",
     "postcss": "^8.4.12",
     "postcss-cli": "^9.1.0",
     "postcss-loader": "^6.2.1",

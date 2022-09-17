@@ -14,7 +14,7 @@ export const selectionSort = (blocks, compare) => {
   for (i = 0; i < dupBlocks.length; i++) {
     for (j = i + 1; j < dupBlocks.length; j++) {
       order.push([dupBlocks[i], dupBlocks[j], null, null]); // Compare
-      if (!compare(dupBlocks[i], dupBlocks[j])) {
+      if (compare(dupBlocks[i], dupBlocks[j])) {
         swap(dupBlocks, i, j);
         order.push([dupBlocks[i], dupBlocks[j], dupBlocks.slice(), null]); // Swap
       }
