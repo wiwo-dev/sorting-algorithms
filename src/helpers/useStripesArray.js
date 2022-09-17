@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import useWindowHeight from "./useWindowHeight";
-import useWindowWidth from "./useWindowWidth";
 
 export const useStripesArray = ({ amount }) => {
   const [stripes, setStripes] = useState([]);
@@ -8,9 +7,10 @@ export const useStripesArray = ({ amount }) => {
   const [comparing, setComparing] = useState([]);
   const [swapping, setSwapping] = useState([]);
   const [sorted, setSorted] = useState([]);
-  const [stripesCount, setStripesCount] = useState(amount ? amount : 20);
 
   const { height: windowHeight } = useWindowHeight();
+
+  const [stripesCount, setStripesCount] = useState(amount ? amount : 20);
 
   const resetAllStripes = () => {
     const arr = [];

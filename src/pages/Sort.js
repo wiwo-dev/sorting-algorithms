@@ -20,8 +20,9 @@ import { TiInfoLarge } from "react-icons/ti";
 
 export default function Sort() {
   const { width: windowWidth } = useWindowWidth();
-
   const stripeWidth = 20;
+
+  const stripesCountMax = windowWidth <= 1000 ? Math.floor(windowWidth / (stripeWidth + 10)) : 35;
 
   const {
     stripes,
@@ -40,7 +41,11 @@ export default function Sort() {
     getInitialPosition,
     getColor,
     swapByElements,
-  } = useStripesArray({ amount: Math.floor((windowWidth < 1000 ? windowWidth : 1000) / (stripeWidth + 10) / 2) });
+  } = useStripesArray({ amount: Math.floor((windowWidth < 1000 ? windowWidth : 1000) / (stripeWidth + 10) / 2) - 1 });
+
+  useEffect(() => {
+    setStripesCount(Math.floor((windowWidth < 1000 ? windowWidth : 1000) / (stripeWidth + 10) / 2) - 1);
+  }, [windowWidth]);
 
   const [speed, setSpeed] = useState(400);
 
@@ -228,6 +233,7 @@ export default function Sort() {
     speedToValue,
     stripesCount,
     setStripesCount,
+    stripesCountMax,
     getColor,
     clearColors,
     sortingStatus,
@@ -237,7 +243,6 @@ export default function Sort() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   useEffect(() => {
     onOpen();
-    return () => {};
   }, []);
 
   return (

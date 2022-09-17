@@ -14,22 +14,27 @@ import SettingsSlider from "components/SettingsSlider";
 import React, { useContext, useState } from "react";
 import AlgorithmSelect from "./AlgorithmSelect";
 import Controls from "components/Controls";
-
 import useWindowWidth from "helpers/useWindowWidth";
-
 import { MdExpandMore, MdExpandLess } from "react-icons/md";
-
 import { motion, AnimatePresence } from "framer-motion";
 import { SettingsContext } from "helpers/SettingsContext";
-import SpeedLengthSliders from "./SpeedLengthSliders";
+
 import SortingVisualizerLogo from "./SortingVisualizerLogo";
 import ControlButton from "./ControlButton";
 
 import { TiInfoLarge } from "react-icons/ti";
 
 export default function SettingsPanel({ onModalOpen }) {
-  const { stripeWidth, setStripesCount, speed, setSpeed, speedToValue, handleSpeedChange, stripesCount } =
-    useContext(SettingsContext);
+  const {
+    stripeWidth,
+    setStripesCount,
+    stripesCountMax,
+    speed,
+    setSpeed,
+    speedToValue,
+    handleSpeedChange,
+    stripesCount,
+  } = useContext(SettingsContext);
 
   const [isMenuOpen, setIsMenuOpen] = useState(true);
   const { width: windowWidth } = useWindowWidth();
@@ -93,7 +98,8 @@ export default function SettingsPanel({ onModalOpen }) {
                 <SettingsSlider
                   //label="Length"
                   min={0}
-                  max={Math.floor(windowWidth / (stripeWidth + 10))}
+                  max={windowWidth <= 1000 ? Math.floor(windowWidth / (stripeWidth + 10)) : 40}
+                  //max={30}
                   value={stripesCount}
                   defaultValue={stripesCount}
                   onChange={setStripesCount}
@@ -165,7 +171,9 @@ export default function SettingsPanel({ onModalOpen }) {
                 <SettingsSlider
                   //label="Length"
                   min={0}
-                  max={Math.floor(windowWidth / (stripeWidth + 10))}
+                  //max={Math.floor(windowWidth / (stripeWidth + 10))}
+                  //max={windowWidth <= 1000 ? Math.floor(windowWidth / (stripeWidth + 10)) : 40}
+                  max={stripesCountMax}
                   value={stripesCount}
                   defaultValue={stripesCount}
                   onChange={setStripesCount}

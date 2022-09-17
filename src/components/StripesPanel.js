@@ -6,13 +6,11 @@ import useWindowWidth from "helpers/useWindowWidth";
 import React, { useContext } from "react";
 
 export default function StripesPanel() {
-  const { stripesOrdered, stripesCount, getColor } = useContext(SettingsContext);
+  const { stripeWidth, stripesOrdered, stripesCount, getColor } = useContext(SettingsContext);
 
   const { width: windowWidth } = useWindowWidth();
 
   const { height: windowHeight } = useWindowHeight();
-
-  const stripeWidth = 20;
 
   return (
     <Box
@@ -24,7 +22,7 @@ export default function StripesPanel() {
       zIndex={0}
       maxW={"1000px"}>
       {stripesOrdered.map((str, i) => {
-        const distance = (windowWidth < 1000 ? windowWidth : 1000) / stripesCount;
+        const distance = (windowWidth <= 1000 ? windowWidth - stripeWidth : 1000) / stripesCount;
         return (
           <Box
             as={motion.div}
