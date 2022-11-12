@@ -65,7 +65,6 @@ export default function Sort() {
       return Object.keys(object).find((key) => object[key] === value);
     }
     return getKeyByValue(speeds, speed);
-    //return maxSpeed - speed;
   };
 
   const [selectedAlgorithm, setSelectedAlgorithm] = useState("bubbleSort");
@@ -248,12 +247,11 @@ export default function Sort() {
   return (
     <SettingsContext.Provider value={value}>
       <Box>
-        <Box position="fixed" right="30px" bottom="30px" zIndex={200}>
+        <Box position="fixed" right="50px" bottom="50px" zIndex={200}>
           <ControlButton icon={TiInfoLarge} onClick={onOpen} normalTooltip="Instruction" />
         </Box>
         <SettingsPanel onModalOpen={onOpen} />
         <StripesPanel />
-
         <InfoModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
       </Box>
     </SettingsContext.Provider>

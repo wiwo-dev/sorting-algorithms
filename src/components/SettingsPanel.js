@@ -98,8 +98,7 @@ export default function SettingsPanel({ onModalOpen }) {
                 <SettingsSlider
                   //label="Length"
                   min={0}
-                  max={windowWidth <= 1000 ? Math.floor(windowWidth / (stripeWidth + 10)) : 40}
-                  //max={30}
+                  max={stripesCountMax}
                   value={stripesCount}
                   defaultValue={stripesCount}
                   onChange={setStripesCount}
@@ -171,8 +170,6 @@ export default function SettingsPanel({ onModalOpen }) {
                 <SettingsSlider
                   //label="Length"
                   min={0}
-                  //max={Math.floor(windowWidth / (stripeWidth + 10))}
-                  //max={windowWidth <= 1000 ? Math.floor(windowWidth / (stripeWidth + 10)) : 40}
                   max={stripesCountMax}
                   value={stripesCount}
                   defaultValue={stripesCount}
