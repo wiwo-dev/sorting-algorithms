@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/sorting-algorithms/static/css/main.d41cfac0.css",
-    "main.js": "/sorting-algorithms/static/js/main.713c0f12.js",
+    "main.css": "/sorting-algorithms/static/css/main.b8adf03e.css",
+    "main.js": "/sorting-algorithms/static/js/main.686589f0.js",
     "static/media/comfortaa-all-400-normal.woff": "/sorting-algorithms/static/media/comfortaa-all-400-normal.ce102a58deaac29dcd38.woff",
     "static/media/comfortaa-all-700-normal.woff": "/sorting-algorithms/static/media/comfortaa-all-700-normal.bef9fdb7bb2a5067e703.woff",
     "static/media/comfortaa-latin-400-normal.woff2": "/sorting-algorithms/static/media/comfortaa-latin-400-normal.c34bd7a05a405c54c9cc.woff2",
@@ -17,11 +17,11 @@
     "static/media/comfortaa-vietnamese-400-normal.woff2": "/sorting-algorithms/static/media/comfortaa-vietnamese-400-normal.a02db6c45ccf0a974a51.woff2",
     "static/media/comfortaa-vietnamese-700-normal.woff2": "/sorting-algorithms/static/media/comfortaa-vietnamese-700-normal.f880d11841d455eedc66.woff2",
     "index.html": "/sorting-algorithms/index.html",
-    "main.d41cfac0.css.map": "/sorting-algorithms/static/css/main.d41cfac0.css.map",
-    "main.713c0f12.js.map": "/sorting-algorithms/static/js/main.713c0f12.js.map"
+    "main.b8adf03e.css.map": "/sorting-algorithms/static/css/main.b8adf03e.css.map",
+    "main.686589f0.js.map": "/sorting-algorithms/static/js/main.686589f0.js.map"
   },
   "entrypoints": [
-    "static/css/main.d41cfac0.css",
-    "static/js/main.713c0f12.js"
+    "static/css/main.b8adf03e.css",
+    "static/js/main.686589f0.js"
   ]
 }
