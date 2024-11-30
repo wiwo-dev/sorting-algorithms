@@ -2,7 +2,7 @@
 
 This project is visualising how sorting algorithms work. A sorting algorithm is an algorithm that puts elements of a list into order. There are many different sorting algorithms and this project is meant to visualise how some of those work. It helps to understand each step. Users can pause the visualization at any moment and go both forward and backward step by step.
 
-![screenshot](https://staging.wiwoproduction.com/_next/image?url=https%3A%2F%2Fimages.ctfassets.net%2F9lwq5y1zam6x%2F5ILOpietDVHTQeJMsnm5Zf%2F66d36d9e5b54a04137327a7f1111d0c0%2Fsorting_visualizer.jpg&w=2048&q=75)
+![screenshot](https://wiwo.dev/_next/image?url=https%3A%2F%2Fimages.ctfassets.net%2F9lwq5y1zam6x%2F5ILOpietDVHTQeJMsnm5Zf%2F66d36d9e5b54a04137327a7f1111d0c0%2Fsorting_visualizer.jpg&w=1080&q=75)
 
 ## Implemented algorithms:
 
@@ -18,7 +18,7 @@ While other sorting visualisers can be found online, I couldn’t find any that 
 
 Furthermore, the animation can be sped up or slowed down during playback.
 
-![controls](https://staging.wiwoproduction.com/_next/image?url=https%3A%2F%2Fimages.ctfassets.net%2F9lwq5y1zam6x%2F28zmuwrfAWJoazCVCozJNZ%2Ff9b278995f9f01dc4445723130ad978c%2Fcontrols.jpg&w=2048&q=75)
+![controls](https://wiwo.dev/_next/image?url=https%3A%2F%2Fimages.ctfassets.net%2F9lwq5y1zam6x%2F1nZ0gf9nKfgvNAsmqpky2w%2F2157606157aeb0dd3afb9afde808191c%2Fintro.jpg&w=1080&q=75)
 
 ## Tech
 
@@ -30,4 +30,4 @@ The user interface is built with Chakra UI library.
 
 At first, a user sees a modal with detailed instructions.
 
-![instruction](https://staging.wiwoproduction.com/_next/image?url=https%3A%2F%2Fimages.ctfassets.net%2F9lwq5y1zam6x%2F1nZ0gf9nKfgvNAsmqpky2w%2F2157606157aeb0dd3afb9afde808191c%2Fintro.jpg&w=2048&q=75)
+![instruction](https://wiwo.dev/_next/image?url=https%3A%2F%2Fimages.ctfassets.net%2F9lwq5y1zam6x%2F1nZ0gf9nKfgvNAsmqpky2w%2F2157606157aeb0dd3afb9afde808191c%2Fintro.jpg&w=1080&q=75)
